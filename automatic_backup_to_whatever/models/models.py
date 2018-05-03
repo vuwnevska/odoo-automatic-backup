@@ -18,7 +18,6 @@ import os
 import datetime
 import hashlib
 import urllib
-from urllib import error as urllib_error
 import json
 
 BACKBLAZE_URL = 'https://api.backblazeb2.com/b2api/v1/b2_authorize_account'
