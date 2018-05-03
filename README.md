@@ -1,7 +1,7 @@
-Odoo 11 - Automatic Backup to whatever
+Odoo 10 - Automatic Backup to whatever
 ===============
 
-![11.0 success](https://img.shields.io/badge/11.0-success-brightgreen.svg)
+![10.0 success](https://img.shields.io/badge/11.0-success-brightgreen.svg)
 
 With this module you can easily make a schedule to backup your odoo database.
 
@@ -11,10 +11,7 @@ Supported Cloud-Storages:
  * ownCloud/nextCloud
  * SFTP
  * Backblaze B2 Cloud Storage
- 
-Works with:
- * Odoo 11 Community/Enterprise
- * Python3.5+
+
  
 Also see: https://apps.odoo.com/apps/modules/11.0/automatic_backup_to_whatever/
 
