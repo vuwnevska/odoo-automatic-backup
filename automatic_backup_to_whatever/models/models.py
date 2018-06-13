@@ -291,13 +291,13 @@ class Configuration(models.Model):
             template = self.env.ref('automatic_backup_to_whatever.'+template_name)
             self.env['mail.template'].browse(template.id).send_mail(self.id, force_send=True)
 
-    def action_backup(self, id):
+    def action_backup(self, ids=None):
         """
         Executes Backup by backup_model id
         if ID not found throws exception
         :param id: number
         """
-        backup_ids = self.browse(id)
+        backup_ids = self.browse(ids)
         for backup in backup_ids:
             backup.btn_action_backup()
 
