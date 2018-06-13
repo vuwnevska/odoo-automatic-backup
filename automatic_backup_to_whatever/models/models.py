@@ -266,19 +266,18 @@ class Configuration(models.Model):
         next_backup_time = self.next_backup_time
         if not next_backup_time:
             next_backup_time = datetime.datetime.today() + datetime.timedelta(days=1)
-        model_id = self.env['ir.model'].search([('model', '=', self._name)])
         cron_id = self.env['ir.cron'].create({
             'name': 'Backup: ' + self.name,
-            'model_id': model_id.id,
-            'state': 'code',
             'user_id': 1,
             'interval_number': self.schedule_number,
             'interval_type': self.schedule_frequently,
             'nextcall': next_backup_time,
-            'priority': 100,
+            'priority': 1,
             'numbercall': -1,
             'active': self.active,
-            'code': 'model.action_backup(' + str(self.id) + ')'
+            'model': 'automatic_backup_to_whatever.configuration',
+            'function':'action_backup',
+            'args':'('+str(self.id)+',)',
         })
         self.cron_id = cron_id.id
 
@@ -292,13 +291,13 @@ class Configuration(models.Model):
             template = self.env.ref('automatic_backup_to_whatever.'+template_name)
             self.env['mail.template'].browse(template.id).send_mail(self.id, force_send=True)
 
-    def action_backup(self, id):
+    def action_backup(self, ids=None):
         """
         Executes Backup by backup_model id
         if ID not found throws exception
         :param id: number
         """
-        backup_ids = self.browse(id)
+        backup_ids = self.browse(ids)
         for backup in backup_ids:
             backup.btn_action_backup()
 
@@ -320,9 +319,9 @@ class Configuration(models.Model):
                 self._backup_on_sftp()
             elif self.backup_type == BackupTypes.backblaze.value[0]:
                 self._backup_to_backblaze()
-            # Add here another "if condition" when you would like to implement another backup type
+            # Add here another "if co:ndition" when you would like to implement another backup type
             self.send_email()
-        except requests_exceptions.ConnectionError:
+        except requests_exceptions.ConnectionError as err:
             message = 'odoo Server has no connection to this service-provider!'
             self.set_last_fields(message)
             self.message_post(message)
